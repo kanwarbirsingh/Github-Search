@@ -2,18 +2,18 @@ import Repos from './Repos';
 import axios from 'axios';
 import React, { Component } from 'react';
 import './User.css';
+
 export default class User extends Component {
 	state = {
-		userRepos: []
+		userRepos: [],
+		image: require('../avatar.png')
 	};
 
 	handleFetchRepos = e => {
 		e.preventDefault();
 		axios
 			.get(
-				`https://api.github.com/users/${this.props.search}/repos?client_id=${
-					this.state.client_id
-				}&client_secret=${this.state.client_secret}`
+				`https://api.github.com/users/${this.props.search}/repos`
 			)
 			.then(response => {
 				console.log(response);
@@ -38,7 +38,7 @@ export default class User extends Component {
 			<React.Fragment>
 				<div className="row my-3">
 					<div className="col-sm-6 col-md-4 my-2">
-						<img src={image} className="img-fluid" alt="Responsive image" />
+						<img src={image? image : this.state.image} className="img-fluid" alt="Responsive" />
 					</div>
 					<div className="col-sm-6 col-md-4 my-2 text-capitalize">
 						<h6>
@@ -59,7 +59,7 @@ export default class User extends Component {
 							public repos: <span className="badge badge-success">{repos}</span>
 						</h6>
 					</div>
-					<div className="col-sm-6 col-md-4 my-2 text-capitalize user-repos ">
+					<div className="col-sm-6 col-md-4 my-2 text-capitalize ">
 						<button
 							type="button"
 							className="btn btn-outline-info mt-3 text-capitalize"
@@ -67,7 +67,10 @@ export default class User extends Component {
 						>
 							get repos
 						</button>
+						<div className="user-repos">
 						<Repos userRepos={this.state.userRepos} />
+						</div>
+						
 					</div>
 				</div>
 			</React.Fragment>

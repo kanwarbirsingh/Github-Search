@@ -6,17 +6,17 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 class App extends Component {
 	state = {
-		client_id: '#',
-		client_secret: '#',
 		base: 'https://api.github.com/users/',
 		value: '',
 		user: {},
-		error: false
+		error: false,
+		searched:false
 	};
 
 	handleChange = e => {
 		let searchValue = e.target.value.trim();
 		this.setState({
+			searched:false,
 			value: searchValue
 		});
 	};
@@ -33,15 +33,14 @@ class App extends Component {
 		} else {
 			axios
 				.get(
-					`https://api.github.com/users/${search}?client_id='${
-						this.state.client_id
-					}'&client_secret='${this.state.client_secret}'`
+					`https://api.github.com/users/${search}`
 				)
 				.then(response => {
-					// console.log(response);
+					console.log(response);
 					let userData = response.data;
 
 					this.setState(prevState => ({
+						searched:true,
 						user: { ...prevState.user, ...userData }
 					}));
 				});
@@ -85,16 +84,18 @@ class App extends Component {
 								</div>
 							</form>
 							{this.state.error && (
-								<div class="alert alert-danger text-center text-capitalize">
+								<div className="alert alert-danger text-center text-capitalize">
 									Value Empty
 								</div>
 							)}
-							<User 
-							search={this.state.value} 
-							userData={this.state.user}
-							cilent_id={this.state.client_id}
-							client_secret={this.state.client_secret}
-							 />
+							{this.state.searched && (
+								<User 
+								search={this.state.value} 
+								userData={this.state.user}
+								
+								/>
+							)}
+							
 						</div>
 					</div>
 				</div>
